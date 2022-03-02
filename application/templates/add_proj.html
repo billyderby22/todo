@@ -1,17 +1,13 @@
 {% extends 'layout.html' %}
 {% block body %}
-<h2>{{ ptitle }}</h2>
+<h2>Add Project</h2>
 <div class="form">
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <br>
-        {{ form.title.label }} {{ form.title }}
+        {{ form.name.label }} {{ form.name }}
         <br>
-        {{ form.desc.label }} {{ form.desc }}
-        <br>
-        {{ form.status.label }} {{ form.status }}
-        <br>
-        {{ form.proj_id.label }} {{ form.proj_id }}
+        {{ form.due.label }} {{ form.due }}
         <br>
         {{ form.submit }}
     </form>
@@ -20,5 +16,3 @@
     {% endif %}
 </div>
 {% endblock body %}
-
-
