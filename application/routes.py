@@ -1,20 +1,25 @@
-from flask import redirect, url_for
+from flask import redirect, url_for, render_template
 from application import app, db
 from application.models import Todo, Project
 from datetime import date, timedelta
 
 @app.route('/')
 def home():
-    return f"{Todo.query.count()} todos: " + '<br>'.join(str(t) + " " + str(t.project) for t in Todo.query.all())
+    num_todos = Todo.query.count()
+    todos = [str(todo) + " " + str(todo.project) for todo in Todo.query.all()]
+    return render_template('index.html', num = num_todos, todos = todos)
 
 @app.route('/search=<keyword>')
 def search(keyword):
     data = db.session.execute(f"SELECT * FROM todo WHERE desc LIKE '%{keyword}%'")
-    return '<br>'.join([str(res) for res in data])
+    data = list(data)
+    num_results = len(data)
+    return render_template('search.html', res = [str(res) for res in data], n = num_results)
 
 @app.route('/done')
 def done():
-    return '<br>'.join(str(t) for t in Todo.query.filter_by(status='done').order_by(Todo.title.desc()).all())
+    res = [str(t) for t in Todo.query.filter_by(status='done').order_by(Todo.title.desc()).all()]
+    return render_template('done.html', res = res)
 
 @app.route('/create/<int:pnum>/<title>/<desc>')
 def create(pnum, title, desc):
